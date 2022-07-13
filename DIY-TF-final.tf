@@ -29,6 +29,10 @@ data "ibm_is_ssh_key" "ssh_key_id" {
   name = var.ssh_key
 }
 
+# data "ibm_is_image" "image_id" {
+#   name = var.image
+# }
+
 resource "ibm_is_security_group" "sg" {
   name           = "${var.vpc_name}-sg"
   vpc            = data.ibm_is_vpc.vpc.id
@@ -63,16 +67,16 @@ resource "ibm_is_security_group_rule" "ssh_outbound" {
   remote    = "0.0.0.0/0"
 }
 
-resource "ibm_is_image" "custom_image" {
-  name             = "${var.vpc_name}-ubuntu-os-20"
-  href             = var.image_url
-  operating_system = "ubuntu-20-04-amd64"
-  resource_group   = data.ibm_resource_group.rg.id
-  timeouts {
-    create = "90m"
-    delete = "90m"
-  }
-}
+#  resource "ibm_is_image" "diy_image" {
+#   name             = "${var.vpc_name}-ubuntu-os-20"
+#   href             = var.image_url
+#   operating_system = "ubuntu-20-04-amd64"
+#   resource_group   = data.ibm_resource_group.rg.id
+#   timeouts {
+#     create = "90m"
+#     delete = "90m"
+#   }
+# }
 
 resource "ibm_is_instance" "vsi" {
   name           = "${var.vpc_name}-vsi"
@@ -80,11 +84,12 @@ resource "ibm_is_instance" "vsi" {
   zone           = var.zone
   keys           = [data.ibm_is_ssh_key.ssh_key_id.id]
   resource_group = data.ibm_resource_group.rg.id
-  image          = ibm_is_image.custom_image.id
+  image          = var.image
   profile        = var.profile
 
+    user_data = file("download_diy.sh")
   primary_network_interface {
-    subnet          = data.ibm_is_subnet.subnet.id
+     subnet          = data.ibm_is_subnet.subnet.id
     security_groups = [ibm_is_security_group.sg.id]
   }
 }
@@ -106,9 +111,9 @@ variable "TF_VERSION" {
   description = "Terraform engine version to be used in schematics"
 }
 
-variable "image_url" {
-  default     = "cos://eu-de/sat-diy-test/DIY-Appliance-Gold-Image.qcow2"
-  description = "URL for source VSI image used to spin up instance."
+variable "image" {
+  description = "Ubuntu 20 image."
+  type        = string
 }
 
 variable "ibmcloud_api_key" {
