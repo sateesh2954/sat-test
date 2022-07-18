@@ -5,7 +5,7 @@ curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 ibmcloud plugin install vpc-infrastructure
 snap install slcli
 ibmcloud plugin install cloud-object-storage
-apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils -y
+apt-get install qemu-utils -y
 
 mkdir -p /opt/diy-migration-appliance/scripts
 cd /opt/diy-migration-appliance/scripts
