@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt-get update -y
 sudo apt-get install nmap -y
-apt-get install qemu-utils -y
+sudo apt-get install qemu-utils -y
 curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 ibmcloud plugin install vpc-infrastructure
 snap install slcli
