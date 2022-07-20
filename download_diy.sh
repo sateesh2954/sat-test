@@ -1,10 +1,10 @@
 #!/bin/bash
 sudo apt-get update -y
-sudo apt-get install nmap -y
-sudo apt-get install qemu-kvm -y
+sudo apt-get install nmap -y |
+sudo apt-get install qemu-kvm -y |
 curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
-ibmcloud plugin install vpc-infrastructure
-ibmcloud plugin install cloud-object-storage
+| ibmcloud plugin install vpc-infrastructure
+| ibmcloud plugin install cloud-object-storage
 
 mkdir -p /opt/diy-migration-appliance/scripts
 cd /opt/diy-migration-appliance/scripts
